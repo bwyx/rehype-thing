@@ -26,4 +26,11 @@ test('finds code and highlights', () => {
   assert.is(processHtml(html), expected)
 })
 
+test('handles uppercase languages correctly', () => {
+  const html = dedent`<pre><code class="language-JS">const x = 8</code></pre>`
+  const expect = dedent`<pre><code class="language-JS"><span class="token keyword">const</span> x <span class="token operator">=</span> <span class="token number">8</span></code></pre>`
+
+  assert.is(processHtml(html), expect)
+})
+
 test.run()

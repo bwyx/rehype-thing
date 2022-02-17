@@ -6,7 +6,7 @@ const getLanguage = (node) => {
   const lang = node.properties.className.find((className) =>
     className.startsWith('language-')
   )
-  return lang ? lang.slice(9) : null
+  return lang ? lang.slice(9).toLowerCase() : null
 }
 
 export default function () {
