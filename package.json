@@ -2,7 +2,7 @@
   "type": "module",
   "scripts": {
     "tscw": "tsc-watch --onSuccess \"npm run test\"",
-    "test": "uvu"
+    "test": "uvu tests"
   },
   "devDependencies": {
     "tsc-watch": "^4.6.0",
