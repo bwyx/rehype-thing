@@ -4,7 +4,7 @@ import * as assert from 'uvu/assert'
 import { rehype } from 'rehype'
 import dedent from 'dedent'
 
-import highlightCode from '../src/highlightCode.js'
+import highlightCode from '../src/highlightCode'
 
 const processHtml = (html, options) =>
   rehype()
@@ -13,8 +13,9 @@ const processHtml = (html, options) =>
     .processSync(html)
     .toString()
 
-const rawJS = `const x = 8`
-const highlightedJS = `<span class="token keyword">const</span> x <span class="token operator">=</span> <span class="token number">8</span>`
+const rawJS = 'const x = 8'
+const highlightedJS =
+  '<span class="token keyword">const</span> x <span class="token operator">=</span> <span class="token number">8</span>'
 
 test('finds code and highlights', () => {
   const html = dedent`
@@ -53,14 +54,9 @@ test('throw error with fake language- class', () => {
 })
 
 test('with options.ignoreMissing, does nothing to code block with fake language- class', () => {
-  const result = processHtml(
-    dedent`
-    <pre><code class="language-thisisnotalanguage">${rawJS}</code></pre>
-  `,
-    { ignoreMissing: true }
-  )
-  const expected = dedent`<pre><code class="language-thisisnotalanguage">${rawJS}</code></pre>`
-  assert.is(result, expected)
+  const html = dedent`<pre><code class="language-thisisnotalanguage">${rawJS}</code></pre>`
+
+  assert.is(processHtml(html, { ignoreMissing: true }), html)
 })
 
 test.run()

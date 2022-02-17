@@ -11,11 +11,11 @@ import { toString } from 'hast-util-to-string'
  * @returns {string|null}
  */
 const getLanguage = (node) => {
-  const className = node.properties.className
+  const { className } = node.properties
   const lang =
     className &&
     // @ts-ignore
-    className.find((className) => className.startsWith('language-'))
+    className.find((c) => c.startsWith('language-'))
   return lang ? lang.slice(9).toLowerCase() : null
 }
 
@@ -23,17 +23,13 @@ const getLanguage = (node) => {
  * @param {{ignoreMissing?: boolean}} options
  * @returns {(tree: Element) => void}
  */
-export default function (options = {}) {
-  return (tree) => {
-    visit(tree, 'element', visitor)
-  }
-
+const highlightCode = (options = {}) => {
   /**
    * @param {Element} node
    * @param {number} index
    * @param {Element} parent
    */
-  function visitor(node, index, parent) {
+  const visitor = (node, index, parent) => {
     if (!parent || parent.tagName !== 'pre' || node.tagName !== 'code') return
 
     const lang = getLanguage(node)
@@ -49,6 +45,13 @@ export default function (options = {}) {
       throw err
     }
 
+    // eslint-disable-next-line no-param-reassign
     node.children = refractorRoot.children
   }
+
+  return (tree) => {
+    visit(tree, 'element', visitor)
+  }
 }
+
+export default highlightCode
